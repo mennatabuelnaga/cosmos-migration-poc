@@ -1,0 +1,2 @@
+ac83dab8fb607df2b912acbac96f9c1c5f66f4acc9c3bc678b952ecae232fd82  ./target/wasm32-unknown-unknown/release/poc_contract_v1.wasm
+00a9b7c590258d835f160cd02fe121414ba4fe1e6a624c34997e88a565ae1810  ./target/wasm32-unknown-unknown/release/poc_contract_v2.wasm
