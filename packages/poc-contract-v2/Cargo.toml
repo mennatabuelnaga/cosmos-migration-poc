@@ -53,6 +53,7 @@ getrandom = { workspace=true }
 
 cw721              = { workspace=true}
 cw721-base         = { workspace=true}
+semver = { workspace=true}
 
 [dev-dependencies]
 cw-multi-test = "0.17.0"

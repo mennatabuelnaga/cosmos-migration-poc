@@ -697,6 +697,7 @@ dependencies = [
  "getrandom",
  "hex",
  "schemars",
+ "semver",
  "serde",
  "sha3",
  "thiserror",

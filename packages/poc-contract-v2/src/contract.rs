@@ -1,16 +1,13 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, to_json_binary, Empty};
+use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, to_json_binary};
 use cw2::set_contract_version;
-// use cw2::set_contract_version;
-use cw2::get_contract_version;
-use cw721_base::msg;
-use crate::msg::GetVersionResponse;
 use crate::error::ContractError;
-use crate::migrations;
-use crate::msg::{ExecuteMsg, InstantiateMsg, PocSudoMsg, QueryMsg, GetStateSizeResponse, GetStateKeysResponse, MigrateMsg, GetMigrationMsgResponse};
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg, GetStateSizeResponse, GetStateKeysResponse, MigrateMsg, GetMigrationMsgResponse};
 use crate::state::STATE;
 use sha3::{Digest, Keccak256};
+use cw2::get_contract_version;
+use semver::Version;
 
 // version info
 pub const CONTRACT_NAME: &str = "crates.io:migration-poc";
@@ -46,10 +43,7 @@ pub fn execute(
             }
             Ok(Response::new().add_attribute("method", "post_result"))
         },
-    //     ExecuteMsg::Migrate(msg) => match msg {
-    //         MigrateV1ToV2::MigrateSate {
-    //         } => migrations::v3_0_0::migrate(deps),
-    //     },
+   
     }
 }
 
@@ -73,50 +67,24 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
 
 
     },
-    QueryMsg::GetVersion {  } => {
-        let res: GetVersionResponse = GetVersionResponse{version: get_contract_version(deps.storage)?};
-        Ok(to_json_binary(&res).unwrap())
-
-
-    }
+   
 }
 }
 
-
-#[cfg_attr(not(feature = "library"), entry_point)]
-pub fn sudo(deps: DepsMut, _env: Env, msg: PocSudoMsg) -> Result<Response, ContractError> {
-    match msg {
-        PocSudoMsg::PostResults { results } => {
-            for input in results {
-                let hash = hash_string(input.clone());
-                STATE.save(deps.storage, hash, &input)?;
-
-            }
-            Ok(Response::new().add_attribute("method", "post_result"))
-
-        }
-        PocSudoMsg::Infinite{} => {
-            while true{}
-            Ok(Response::new().add_attribute("method", "infinite"))
-
-        },
-        // PocSudoMsg::Migrate(msg) => match msg {
-        //     MigrateV1ToV2::MigrateSate {
-        //     } => migrations::v3_0_0::migrate(deps),
-        // },
-
-    }
-}
 
 
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn migrate(deps: DepsMut, _env: Env, msg: MigrateMsg) -> Result<Response, ContractError> {
-    
-    if msg.target_version == "2.0.0" {
-        migrations::v2_0_0::migrate(deps)?;
+pub fn migrate(deps: DepsMut, _env: Env, _msg: MigrateMsg) -> Result<Response, ContractError> {
+    let version: Version = CONTRACT_VERSION.parse()?;
+    let storage_version: Version = get_contract_version(deps.storage)?.version.parse()?;
+
+    if storage_version < version {
+        set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
+        // If state structure changed in any contract version in the way migration is needed, it
+        // should occur here
     }
-    Ok(Response::new().add_attribute("action", "migrate").add_attribute("to_version", msg.target_version))
+    Ok(Response::new().add_attribute("action", "migrate").add_attribute("to_version", CONTRACT_VERSION))
 
 }
 

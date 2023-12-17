@@ -1,12 +1,9 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, to_json_binary, Empty};
-use cw2::{set_contract_version, get_contract_version};
-// use cw2::set_contract_version;
-use crate::msg::GetVersionResponse;
+use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, to_json_binary};
+use cw2::set_contract_version;
 use crate::error::ContractError;
-// use crate::migrations;
-use crate::msg::{ExecuteMsg, InstantiateMsg, PocSudoMsg, QueryMsg, GetStateSizeResponse, GetStateKeysResponse};
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg, GetStateSizeResponse, GetStateKeysResponse};
 use crate::state::STATE;
 use sha3::{Digest, Keccak256};
 
@@ -44,10 +41,7 @@ pub fn execute(
             }
             Ok(Response::new().add_attribute("method", "post_result"))
         },
-        // ExecuteMsg::Migrate(msg) => match msg {
-        //     MigrateV1ToV2::MigrateSate {
-        //     } => migrations::v2_0_0::migrate(deps),
-        // },
+       
     }
 }
 
@@ -65,41 +59,11 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         Ok(to_json_binary(&res).unwrap())
         
     },
-    QueryMsg::GetVersion {  } => {
-        let res: GetVersionResponse = GetVersionResponse{version: get_contract_version(deps.storage)?};
-        Ok(to_json_binary(&res).unwrap())
-
-
-    }
+   
 
 }
 }
 
-
-#[cfg_attr(not(feature = "library"), entry_point)]
-pub fn sudo(deps: DepsMut, _env: Env, msg: PocSudoMsg) -> Result<Response, ContractError> {
-    match msg {
-        PocSudoMsg::PostResults { results } => {
-            for input in results {
-                let hash = hash_string(input.clone());
-                STATE.save(deps.storage, hash, &input)?;
-
-            }
-            Ok(Response::new().add_attribute("method", "post_result"))
-
-        }
-        PocSudoMsg::Infinite{} => {
-            while true{}
-            Ok(Response::new().add_attribute("method", "infinite"))
-
-        },
-        // PocSudoMsg::Migrate(msg) => match msg {
-        //     MigrateV1ToV2::MigrateSate {
-        //     } => migrations::v2_0_0::migrate(deps),
-        // },
-
-    }
-}
 
 
 

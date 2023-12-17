@@ -1,5 +1,4 @@
-use cosmwasm_std::Addr;
-use cw_storage_plus::{Map, Item};
+use cw_storage_plus::Map;
 
 
 

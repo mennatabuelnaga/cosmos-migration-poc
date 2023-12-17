@@ -6,4 +6,4 @@
 source terra-scripts/common.sh
 
 
-migrate_call $POC_CONTRACT_ADDRESS $CODE_ID '{"target_version":"2.0.0"}'
+migrate_call $POC_CONTRACT_ADDRESS $CODE_ID '{}'

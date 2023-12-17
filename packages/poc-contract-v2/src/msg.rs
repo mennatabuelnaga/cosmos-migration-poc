@@ -1,5 +1,4 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
-use cw2::ContractVersion;
 
 #[cw_serde]
 pub struct InstantiateMsg {}
@@ -22,23 +21,6 @@ pub enum QueryMsg {
     #[returns(GetMigrationMsgResponse)]
     GetMigrationMsg{},
 
-    #[returns(GetVersionResponse)]
-    GetVersion{}
-
-}
-#[cw_serde]
-
-pub struct GetVersionResponse{
-    pub version: ContractVersion
-}
-
-
-
-#[cw_serde]
-pub enum PocSudoMsg {
-    PostResults{results: Vec<String>},
-    Infinite{},
-   
 }
 
 
@@ -56,10 +38,6 @@ pub struct GetStateKeysResponse{
 }
 
 
-// #[cw_serde]
-// pub enum MigrateMsg {
-//     V1_0_0ToV2_0_0{},
-// }
 
 #[cw_serde]
 
@@ -70,6 +48,4 @@ pub struct GetMigrationMsgResponse{
 #[cw_serde]
 
 pub struct MigrateMsg {
-    /// Specify the version that we are migrating up to
-    pub target_version: String,
 }
