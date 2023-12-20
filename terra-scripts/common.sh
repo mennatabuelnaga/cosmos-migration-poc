@@ -14,34 +14,32 @@ wasm_execute() {
 
     OUTPUT="$(terrad tx wasm execute $POC_CONTRACT_ADDRESS $1 --from $DEV_ACCOUNT --node $RPC_URL --gas-prices 0.025uluna --gas auto --gas-adjustment 1.3 -y --output json --chain-id $CHAIN_ID --amount "$2"uluna)"
     echo $OUTPUT
-
+    BALANCE_BEFORE="$(terrad query bank balances $DEV_ACCOUNT --node $RPC_URL --output json | jq -r '.balances[].amount')"
     TXHASH=$(echo "$OUTPUT" | jq -r '.txhash')
     echo $TXHASH
-
+    
     sleep 10
+    BALANCE_AFTER="$(terrad query bank balances $DEV_ACCOUNT --node $RPC_URL --output json | jq -r '.balances[].amount')"
+    SPENT=$(($BALANCE_BEFORE - $BALANCE_AFTER))
+    echo "wasm_execute() uluna spent: " $SPENT
+
 }
 
-# sudo_call <SUDO_MSG>
-sudo_call() {
 
-    OUTPUT="$(terrad tx wasm submit-proposal sudo-contract $POC_CONTRACT_ADDRESS $1 --from $DEV_ACCOUNT --node $RPC_URL --gas-prices 0.025uluna --gas auto --gas-adjustment 1.3 -y --output json --chain-id $CHAIN_ID --title "sudo-execute"  --summary "post_results" --deposit "$2"uluna)"
-    echo $OUTPUT
-
-    TXHASH=$(echo "$OUTPUT" | jq -r '.txhash')
-    echo $TXHASH
-
-    sleep 10
-}
 
 # migrate_call <OLD_CONTRACT_ADDRESS> <NEW_CODE_ID> <MIGRATION_MSG>
 migrate_call() {
-    echo "address" $1
-    echo "id" $2
-    echo "msg" $3
+    BALANCE_BEFORE="$(terrad query bank balances $DEV_ACCOUNT --node $RPC_URL --output json | jq -r '.balances[].amount')"
+
     OUTPUT="$(terrad tx wasm migrate $1 $2 $3 --node $RPC_URL --output json --from $DEV_ACCOUNT --node $RPC_URL --gas-prices 0.025uluna --gas auto --gas-adjustment 1.3 -y --output json --chain-id $CHAIN_ID)"
-    echo $OUTPUT
+    echo "output: " $OUTPUT
 
     sleep 10
+    BALANCE_AFTER="$(terrad query bank balances $DEV_ACCOUNT --node $RPC_URL --output json | jq -r '.balances[].amount')"
+    SPENT=$(($BALANCE_BEFORE - $BALANCE_AFTER))
+    echo "migrate_call() uluna spent: " $SPENT
+
+
 }
 
 

@@ -6,10 +6,13 @@ source terra-scripts/common.sh
 
 # store_contract CONTRACT_NAME
 store_contract(){
+    BALANCE_BEFORE="$(terrad query bank balances $DEV_ACCOUNT --node $RPC_URL --output json | jq -r '.balances[].amount')"
 
     OUTPUT="$(terrad tx wasm store "./artifacts/$1.wasm" --node $RPC_URL --from $DEV_ACCOUNT --gas-prices 0.1uluna --gas auto --gas-adjustment 1.6 -y --output json --chain-id $CHAIN_ID)"
     echo $OUTPUT
-
+    BALANCE_AFTER="$(terrad query bank balances $DEV_ACCOUNT --node $RPC_URL --output json | jq -r '.balances[].amount')"
+    SPENT=$(($BALANCE_BEFORE - $BALANCE_AFTER))
+    echo "store_contract() uluna spent: " $SPENT
     TXHASH=$(echo $OUTPUT | jq -r '.txhash')
     echo $TXHASH
 
