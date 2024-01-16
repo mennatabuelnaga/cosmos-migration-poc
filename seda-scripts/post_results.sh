@@ -7,7 +7,7 @@ source seda-scripts/common.sh
 
 
 # Example usage: generate a random array of 5 strings, each with a length of 8
-generated_array=$(generate_random_array_json 10 8)
+generated_array=$(generate_random_array_json 1000 8)
 # echo "Random Array: ${generated_array}"
 
 

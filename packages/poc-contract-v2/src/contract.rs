@@ -79,11 +79,10 @@ pub fn migrate(deps: DepsMut, _env: Env, _msg: MigrateMsg) -> Result<Response, C
     let version: Version = CONTRACT_VERSION.parse()?;
     let storage_version: Version = get_contract_version(deps.storage)?.version.parse()?;
 
-    if storage_version < version {
-        set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
-        // If state structure changed in any contract version in the way migration is needed, it
-        // should occur here
-    }
+    set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
+    // If state structure changed in any contract version in the way migration is needed, it
+    // should occur here
+    STATE.save(deps.storage, "seda_key".to_owned(), &"seda_msg".to_string())?;
     Ok(Response::new().add_attribute("action", "migrate").add_attribute("to_version", CONTRACT_VERSION))
 
 }

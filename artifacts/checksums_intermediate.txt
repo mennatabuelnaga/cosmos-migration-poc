@@ -1,2 +1,2 @@
-ad675c600d059bf54bfd56fb48142a7327ead520a00171acb82b34ea6eca79ee  ./target/wasm32-unknown-unknown/release/poc_contract_v1.wasm
-7e3216b4c846d65b5f1656c79b99bf8188710598bb51febb417a82f84260742e  ./target/wasm32-unknown-unknown/release/poc_contract_v2.wasm
+faced80d7a484de104130ff2de4c74a19a5d21de688f92ab47df260bfb800f13  ./target/wasm32-unknown-unknown/release/poc_contract_v1.wasm
+6ae27e21f07a807afdf02347d2c5619ba1b20d78126b15b4a7f72c40586cbfed  ./target/wasm32-unknown-unknown/release/poc_contract_v2.wasm
