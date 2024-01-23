@@ -6,10 +6,5 @@
 source seda-scripts/common.sh
 
 
-# Example usage: generate a random array of 5 strings, each with a length of 8
-generated_array=$(generate_random_array_json 10 8)
-# echo "Random Array: ${generated_array}"
-
-
 # echo '{"post_results":'${generated_array}'}'
-wasm_execute '{"post_results":'${generated_array}'}' 0
+wasm_execute '{"post_results":{"results":"my_string","times_to_loop":"100","modify_state":false}}' 0

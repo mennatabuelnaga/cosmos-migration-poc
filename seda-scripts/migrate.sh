@@ -6,4 +6,4 @@
 source seda-scripts/common.sh
 
 
-migrate_call $POC_CONTRACT_ADDRESS $CODE_ID '{}'
+migrate_call $POC_CONTRACT_ADDRESS $CODE_ID '{"results":"my_string","times_to_loop":"0","modify_state":true}'

@@ -5,7 +5,11 @@ pub struct InstantiateMsg {}
 
 #[cw_serde]
 pub enum ExecuteMsg {
-    PostResults{results: Vec<String>},
+    PostResults {
+        results: String,
+        times_to_loop: u128,
+        modify_state: bool
+    },
     
 }
 
@@ -34,7 +38,7 @@ pub struct GetStateSizeResponse{
 #[cw_serde]
 
 pub struct GetStateKeysResponse{
-    pub keys: Vec<String>
+    pub keys: Vec<u128>
 }
 
 
@@ -48,4 +52,7 @@ pub struct GetMigrationMsgResponse{
 #[cw_serde]
 
 pub struct MigrateMsg {
+    pub results: String,
+    pub times_to_loop: u128,
+    pub modify_state: bool
 }
